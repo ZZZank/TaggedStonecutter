@@ -3,7 +3,6 @@ package com.zzzank.taggedstonecutter.recipe;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.tags.SerializationTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagCollection;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -42,16 +41,6 @@ public abstract class RecipeGenerater {
         for (TagAddingRecipe recipe : RECIPES) {
             if (recipe.from.contains(item)) {
                 return recipe;
-            }
-        }
-        return null;
-    }
-
-    @Nullable
-    public static Tag<Item> getFirstTagOf(ItemStack item) {
-        for (Tag<Item> tag : getItemTags().getAllTags().values()) {
-            if (tag.contains(item.getItem())) {
-                return tag;
             }
         }
         return null;
