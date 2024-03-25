@@ -16,9 +16,7 @@ public abstract class RecipeGenerater {
     static final List<TagAddingRecipe> RECIPES = new ArrayList<>();
 
     public static List<StonecutterRecipe> generateRecipes(ItemStack stack) {
-        Item item = stack.getItem();
-
-        TagAddingRecipe matched = tryMatch(stack);
+        TagAddingRecipe matched = tryMatch(stack.getItem());
         List<StonecutterRecipe> dummyRecipes = matched == null
             ? new ArrayList<>()
             : toDummyRecipes(Ingredient.of(matched.to));
@@ -38,9 +36,9 @@ public abstract class RecipeGenerater {
     }
 
     @Nullable
-    public static TagAddingRecipe tryMatch(ItemStack stack) {
+    public static TagAddingRecipe tryMatch(Item item) {
         for (TagAddingRecipe recipe : RECIPES) {
-            if (recipe.from.contains(stack.getItem())) {
+            if (recipe.from.contains(item)) {
                 return recipe;
             }
         }
