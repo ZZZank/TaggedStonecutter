@@ -1,9 +1,7 @@
 package com.zzzank.taggedstonecutter.recipe;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import net.minecraft.tags.SerializationTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagCollection;
@@ -15,22 +13,16 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class RecipeGenerater {
 
-    private static final Map<Item, List<StonecutterRecipe>> RESULT_CACHE = new HashMap<>();
     static final List<TagAddingRecipe> RECIPES = new ArrayList<>();
 
     public static List<StonecutterRecipe> generateRecipes(ItemStack stack) {
         Item item = stack.getItem();
-        List<StonecutterRecipe> cached = RESULT_CACHE.get(item);
-        if (cached != null) {
-            return cached;
-        }
 
         TagAddingRecipe matched = tryMatch(stack);
         List<StonecutterRecipe> dummyRecipes = matched == null
             ? new ArrayList<>()
             : toDummyRecipes(Ingredient.of(matched.to));
-        RESULT_CACHE.put(item, dummyRecipes);
-        return RESULT_CACHE.get(item);
+        return dummyRecipes;
     }
 
     private static List<StonecutterRecipe> toDummyRecipes(Ingredient ingr) {
@@ -67,9 +59,5 @@ public abstract class RecipeGenerater {
 
     public static TagCollection<Item> getItemTags() {
         return SerializationTags.getInstance().getItems();
-    }
-
-    public static void clearCache() {
-        RESULT_CACHE.clear();
     }
 }
