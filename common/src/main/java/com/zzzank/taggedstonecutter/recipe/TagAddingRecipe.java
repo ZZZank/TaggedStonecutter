@@ -1,0 +1,119 @@
+package com.zzzank.taggedstonecutter.recipe;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.zzzank.taggedstonecutter.TaggedStonecutter;
+
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
+
+public class TagAddingRecipe implements Recipe<Container> {
+
+    public static final ResourceLocation TYPE_ID = new ResourceLocation(TaggedStonecutter.MOD_ID, "add");
+    public static final RecipeSerializer<TagAddingRecipe> SERIALIZER = new TagAddingRecipeSerializer();
+    public static final RecipeType<TagAddingRecipe> TYPE = new TagAddingRecipeType();
+
+    public final ResourceLocation id;
+    public final Tag<Item> from;
+    public final Tag<Item> to;
+    private final ResourceLocation fromName;
+    private final ResourceLocation toName;
+
+    public TagAddingRecipe(ResourceLocation from, ResourceLocation id) {
+        this(from, from, id);
+    }
+
+    public TagAddingRecipe(ResourceLocation from, ResourceLocation to, ResourceLocation id) {
+        this.id = id;
+        this.fromName = from;
+        this.toName = to;
+        this.from = RecipeGenerater.getItemTags().getTag(this.fromName);
+        this.to = RecipeGenerater.getItemTags().getTag(this.toName);
+
+        RecipeGenerater.RECIPES.add(this);
+    }
+
+    @Override
+    public ItemStack assemble(Container container) {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public boolean canCraftInDimensions(int arg0, int arg1) {
+        return true;
+    }
+
+    @Override
+    public ResourceLocation getId() {
+        return id;
+    }
+
+    @Override
+    public ItemStack getResultItem() {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public RecipeSerializer<?> getSerializer() {
+        return TagAddingRecipe.SERIALIZER;
+    }
+
+    @Override
+    public RecipeType<?> getType() {
+        return TagAddingRecipe.TYPE;
+    }
+
+    @Override
+    public boolean matches(Container container, Level level) {
+        return false;
+    }
+
+    public static final class TagAddingRecipeSerializer implements RecipeSerializer<TagAddingRecipe> {
+
+        private TagAddingRecipeSerializer() {}
+
+        @Override
+        public TagAddingRecipe fromJson(ResourceLocation id, JsonObject o) {
+            String from = o.get("from").getAsString();
+            JsonElement to = o.get("to");
+            if (to == null) {
+                return new TagAddingRecipe(new ResourceLocation(from), id);
+            }
+            return new TagAddingRecipe(
+                new ResourceLocation(from),
+                new ResourceLocation(to.getAsString()),
+                id
+            );
+        }
+
+        @Override
+        public TagAddingRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
+            ResourceLocation fromName = buffer.readResourceLocation();
+            ResourceLocation toName = buffer.readResourceLocation();
+            return new TagAddingRecipe(fromName, toName, id);
+        }
+
+        @Override
+        public void toNetwork(FriendlyByteBuf buffer, TagAddingRecipe recipe) {
+            buffer.writeResourceLocation(recipe.fromName);
+            buffer.writeResourceLocation(recipe.toName);
+        }
+
+        
+    }
+
+    public static final class TagAddingRecipeType implements RecipeType<TagAddingRecipe> {
+
+        private TagAddingRecipeType() {}
+
+        public static final String ID = "add";
+    }
+}

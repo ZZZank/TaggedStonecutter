@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "taggedstonecutter",
+  "version": "${version}",
+  "name": "Tagged Stonecutter",
+  "description": "Adding tag conversion recipes for Stonecutter easily",
+  "authors": [
+    "ZZZank"
+  ],
+  "contact": {
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+  "license": "MIT",
+  "icon": "assets/examplemod/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.zzzank.taggedstonecutter.ExampleModFabric"
+    ]
+  },
+  "mixins": [
+    "taggedstonecutter.mixins.json",
+    "taggedstonecutter-common.mixins.json"
+  ],
+  "depends": {
+    "fabric": "*",
+    "minecraft": ">=1.16.5",
+    "architectury": ">=1.32.68"
+  }
+}

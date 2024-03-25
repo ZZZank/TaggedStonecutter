@@ -1,0 +1,13 @@
+{
+  "required": false,
+  "package": "com.zzzank.taggedstonecutter.mixin.fabric",
+  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.8",
+  "client": [
+  ],
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
