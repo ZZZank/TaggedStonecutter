@@ -21,11 +21,11 @@ public class TagAddingRecipe implements Recipe<Container> {
     public static final RecipeSerializer<TagAddingRecipe> SERIALIZER = new TagAddingRecipeSerializer();
     public static final RecipeType<TagAddingRecipe> TYPE = new TagAddingRecipeType();
 
-    public final ResourceLocation id;
-    public final Tag<Item> from;
-    public final Tag<Item> to;
-    private final ResourceLocation fromName;
-    private final ResourceLocation toName;
+    final ResourceLocation id;
+    final Tag<Item> from;
+    final Tag<Item> to;
+    final ResourceLocation fromName;
+    final ResourceLocation toName;
 
     public TagAddingRecipe(ResourceLocation from, ResourceLocation id) {
         this(from, from, id);
