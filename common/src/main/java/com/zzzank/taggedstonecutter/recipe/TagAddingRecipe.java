@@ -3,7 +3,6 @@ package com.zzzank.taggedstonecutter.recipe;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.zzzank.taggedstonecutter.TaggedStonecutter;
-
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.Tag;
@@ -14,6 +13,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 public class TagAddingRecipe implements Recipe<Container> {
 
@@ -80,6 +80,8 @@ public class TagAddingRecipe implements Recipe<Container> {
 
         private TagAddingRecipeSerializer() {}
 
+        public static ResourceLocation registryName = TagAddingRecipe.TYPE_ID;
+
         @Override
         public TagAddingRecipe fromJson(ResourceLocation id, JsonObject o) {
             String from = o.get("from").getAsString();
@@ -107,7 +109,19 @@ public class TagAddingRecipe implements Recipe<Container> {
             buffer.writeResourceLocation(recipe.toName);
         }
 
-        
+        RecipeSerializer<TagAddingRecipe> setRegistryName(ResourceLocation name) {
+            TagAddingRecipeSerializer.registryName = name;
+            return this;
+        }
+
+        @Nullable
+        ResourceLocation getRegistryName() {
+            return TagAddingRecipeSerializer.registryName;
+        }
+
+        Class<?> getRegistryType() {
+            return this.getClass();
+        }
     }
 
     public static final class TagAddingRecipeType implements RecipeType<TagAddingRecipe> {
