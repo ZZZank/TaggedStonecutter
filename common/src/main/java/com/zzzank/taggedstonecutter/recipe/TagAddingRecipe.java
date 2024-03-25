@@ -109,18 +109,18 @@ public class TagAddingRecipe implements Recipe<Container> {
             buffer.writeResourceLocation(recipe.toName);
         }
 
-        RecipeSerializer<TagAddingRecipe> setRegistryName(ResourceLocation name) {
+        public RecipeSerializer<?> setRegistryName(ResourceLocation name) {
             TagAddingRecipeSerializer.registryName = name;
             return this;
         }
 
         @Nullable
-        ResourceLocation getRegistryName() {
+        public ResourceLocation getRegistryName() {
             return TagAddingRecipeSerializer.registryName;
         }
 
-        Class<?> getRegistryType() {
-            return this.getClass();
+        public Class<?> getRegistryType() {
+            return TagAddingRecipe.class;
         }
     }
 
