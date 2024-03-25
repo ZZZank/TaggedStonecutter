@@ -13,6 +13,8 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class RecipeGenerater {
 
+    //TODO: cache?
+
     static final List<TagAddingRecipe> RECIPES = new ArrayList<>();
 
     public static List<StonecutterRecipe> generateRecipes(ItemStack stack) {
