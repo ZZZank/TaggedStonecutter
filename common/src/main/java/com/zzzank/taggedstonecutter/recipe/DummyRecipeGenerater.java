@@ -18,7 +18,7 @@ public abstract class DummyRecipeGenerater {
     //TODO: cache?
 
     protected static List<TagAddingRecipe> RECIPES = null;
-    private static MinecraftServer server;
+    private static MinecraftServer server = null;
 
     public static void setServer(MinecraftServer server) {
         DummyRecipeGenerater.server = server;
@@ -26,7 +26,13 @@ public abstract class DummyRecipeGenerater {
 
     public static List<TagAddingRecipe> getAllTagAddingRecipes(){
         if (RECIPES == null) {
+            if (server == null) {
+                return new ArrayList<>(0);
+            }
             RecipeManager recipeManager = server.getRecipeManager();
+            if (recipeManager == null) {
+                return new ArrayList<>(0);
+            }
             RECIPES = recipeManager.getAllRecipesFor(TagAddingRecipe.TYPE);
         }
         return RECIPES;
