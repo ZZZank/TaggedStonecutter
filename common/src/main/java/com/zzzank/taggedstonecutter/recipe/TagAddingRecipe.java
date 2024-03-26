@@ -37,8 +37,6 @@ public class TagAddingRecipe implements Recipe<Container> {
         this.toName = to;
         this.from = DummyRecipeGenerater.getItemTags().getTag(this.fromName);
         this.to = DummyRecipeGenerater.getItemTags().getTag(this.toName);
-
-        DummyRecipeGenerater.RECIPES.add(this);
     }
 
     @Override
