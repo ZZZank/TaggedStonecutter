@@ -15,5 +15,8 @@ public class TaggedStonecutterFabric implements ModInitializer {
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             DummyRecipeGenerater.setServer(server);
         });
+        ServerLifecycleEvents.START_DATA_PACK_RELOAD.register((server, res) -> {
+            DummyRecipeGenerater.clearCache();
+        });
     }
 }

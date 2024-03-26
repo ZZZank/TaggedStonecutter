@@ -5,6 +5,7 @@ import com.zzzank.taggedstonecutter.recipe.DummyRecipeGenerater;
 import com.zzzank.taggedstonecutter.recipe.TagAddingRecipe;
 import me.shedaniel.architectury.platform.forge.EventBuses;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -19,10 +20,14 @@ public class TaggedStonecutterForge {
             TaggedStonecutter.MOD_ID,
             FMLJavaModLoadingContext.get().getModEventBus()
         );
+
         ForgeRegistries.RECIPE_SERIALIZERS.register(TagAddingRecipe.SERIALIZER);
 
         MinecraftForge.EVENT_BUS.addListener((FMLServerAboutToStartEvent event) -> {
             DummyRecipeGenerater.setServer(event.getServer());
+        });
+        MinecraftForge.EVENT_BUS.addListener((AddReloadListenerEvent event) -> {
+            DummyRecipeGenerater.clearCache();
         });
     }
 }
