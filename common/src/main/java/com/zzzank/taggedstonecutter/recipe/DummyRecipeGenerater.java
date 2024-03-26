@@ -10,11 +10,18 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.StonecutterRecipe;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class RecipeGenerater {
+public abstract class DummyRecipeGenerater {
 
     //TODO: cache?
 
-    static final List<TagAddingRecipe> RECIPES = new ArrayList<>();
+    static List<TagAddingRecipe> RECIPES = null;
+
+    public static List<TagAddingRecipe> getAllTagAddingRecipes(){
+        if (RECIPES == null) {
+            
+        }
+        return RECIPES;
+    }
 
     public static List<StonecutterRecipe> generateRecipes(ItemStack stack) {
         TagAddingRecipe matched = tryMatch(stack.getItem());
@@ -48,5 +55,9 @@ public abstract class RecipeGenerater {
 
     public static TagCollection<Item> getItemTags() {
         return SerializationTags.getInstance().getItems();
+    }
+
+    public static void clearCache() {
+        RECIPES = null;
     }
 }

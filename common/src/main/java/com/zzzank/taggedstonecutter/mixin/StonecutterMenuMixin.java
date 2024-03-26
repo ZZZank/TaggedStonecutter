@@ -1,6 +1,6 @@
 package com.zzzank.taggedstonecutter.mixin;
 
-import com.zzzank.taggedstonecutter.recipe.RecipeGenerater;
+import com.zzzank.taggedstonecutter.recipe.DummyRecipeGenerater;
 import java.util.List;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.DataSlot;
@@ -34,7 +34,7 @@ public abstract class StonecutterMenuMixin {
         if (stack.isEmpty()) {
             return;
         }
-        final List<StonecutterRecipe> dummyRecipes = RecipeGenerater.generateRecipes(stack);
+        final List<StonecutterRecipe> dummyRecipes = DummyRecipeGenerater.generateRecipes(stack);
         if (dummyRecipes.isEmpty()) {
             return;
         }
