@@ -1,9 +1,12 @@
 package com.zzzank.taggedstonecutter.forge;
 
 import com.zzzank.taggedstonecutter.TaggedStonecutter;
+import com.zzzank.taggedstonecutter.recipe.DummyRecipeGenerater;
 import com.zzzank.taggedstonecutter.recipe.TagAddingRecipe;
 import me.shedaniel.architectury.platform.forge.EventBuses;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -17,6 +20,9 @@ public class TaggedStonecutterForge {
             FMLJavaModLoadingContext.get().getModEventBus()
         );
         ForgeRegistries.RECIPE_SERIALIZERS.register(TagAddingRecipe.SERIALIZER);
-        // RecipeType
+
+        MinecraftForge.EVENT_BUS.addListener((FMLServerAboutToStartEvent event) ->
+            DummyRecipeGenerater.setServer(event.getServer())
+        );
     }
 }

@@ -2,11 +2,14 @@ package com.zzzank.taggedstonecutter.recipe;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.SerializationTags;
 import net.minecraft.tags.TagCollection;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.StonecutterRecipe;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,11 +17,17 @@ public abstract class DummyRecipeGenerater {
 
     //TODO: cache?
 
-    static List<TagAddingRecipe> RECIPES = null;
+    protected static List<TagAddingRecipe> RECIPES = null;
+    private static MinecraftServer server;
+
+    public static void setServer(MinecraftServer server) {
+        DummyRecipeGenerater.server = server;
+    }
 
     public static List<TagAddingRecipe> getAllTagAddingRecipes(){
         if (RECIPES == null) {
-            
+            RecipeManager recipeManager = server.getRecipeManager();
+            RECIPES = recipeManager.getAllRecipesFor(TagAddingRecipe.TYPE);
         }
         return RECIPES;
     }
