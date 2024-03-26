@@ -2,7 +2,6 @@ package com.zzzank.taggedstonecutter.recipe;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.SerializationTags;
 import net.minecraft.tags.TagCollection;
@@ -17,15 +16,15 @@ public abstract class DummyRecipeGenerater {
 
     //TODO: cache?
 
-    protected static List<TagAddingRecipe> RECIPES = null;
+    protected static List<TagAddingRecipe> recipes = null;
     private static MinecraftServer server = null;
 
     public static void setServer(MinecraftServer server) {
         DummyRecipeGenerater.server = server;
     }
 
-    public static List<TagAddingRecipe> getAllTagAddingRecipes(){
-        if (RECIPES == null) {
+    public static List<TagAddingRecipe> getAllTagAddingRecipes() {
+        if (recipes == null) {
             if (server == null) {
                 return new ArrayList<>(0);
             }
@@ -33,17 +32,17 @@ public abstract class DummyRecipeGenerater {
             if (recipeManager == null) {
                 return new ArrayList<>(0);
             }
-            RECIPES = recipeManager.getAllRecipesFor(TagAddingRecipe.TYPE);
+            recipes = recipeManager.getAllRecipesFor(TagAddingRecipe.TYPE);
         }
-        return RECIPES;
+        return recipes;
     }
 
     public static List<StonecutterRecipe> generateRecipes(ItemStack stack) {
         TagAddingRecipe matched = tryMatch(stack.getItem());
-        List<StonecutterRecipe> dummyRecipes = matched == null
-            ? new ArrayList<>()
-            : toDummyRecipes(Ingredient.of(matched.to));
-        return dummyRecipes;
+        if (matched == null) {
+            return new ArrayList<>(0);
+        }
+        return toDummyRecipes(Ingredient.of(matched.to));
     }
 
     private static List<StonecutterRecipe> toDummyRecipes(Ingredient ingr) {
@@ -60,7 +59,7 @@ public abstract class DummyRecipeGenerater {
 
     @Nullable
     public static TagAddingRecipe tryMatch(Item item) {
-        for (TagAddingRecipe recipe : RECIPES) {
+        for (TagAddingRecipe recipe : getAllTagAddingRecipes()) {
             if (recipe.from.contains(item)) {
                 return recipe;
             }
@@ -73,6 +72,6 @@ public abstract class DummyRecipeGenerater {
     }
 
     public static void clearCache() {
-        RECIPES = null;
+        recipes = null;
     }
 }

@@ -21,8 +21,8 @@ public class TaggedStonecutterForge {
         );
         ForgeRegistries.RECIPE_SERIALIZERS.register(TagAddingRecipe.SERIALIZER);
 
-        MinecraftForge.EVENT_BUS.addListener((FMLServerAboutToStartEvent event) ->
-            DummyRecipeGenerater.setServer(event.getServer())
-        );
+        MinecraftForge.EVENT_BUS.addListener((FMLServerAboutToStartEvent event) -> {
+            DummyRecipeGenerater.setServer(event.getServer());
+        });
     }
 }
