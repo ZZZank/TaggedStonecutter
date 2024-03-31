@@ -6,6 +6,7 @@ import com.zzzank.taggedstonecutter.TaggedStonecutter;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagCollection;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -17,7 +18,6 @@ import org.jetbrains.annotations.Nullable;
 
 public class TagAddingRecipe implements Recipe<Container> {
 
-    public static final ResourceLocation TYPE_ID = new ResourceLocation(TaggedStonecutter.MOD_ID, "add");
     public static final RecipeSerializer<TagAddingRecipe> SERIALIZER = new TagAddingRecipeSerializer();
     public static final RecipeType<TagAddingRecipe> TYPE = new TagAddingRecipeType();
 
@@ -35,8 +35,9 @@ public class TagAddingRecipe implements Recipe<Container> {
         this.id = id;
         this.fromName = from;
         this.toName = to;
-        this.from = DummyRecipeGenerater.getItemTags().getTag(this.fromName);
-        this.to = DummyRecipeGenerater.getItemTags().getTag(this.toName);
+        TagCollection<Item> itemTags = DummyRecipeGenerater.getItemTags();
+        this.from = itemTags.getTag(this.fromName);
+        this.to = itemTags.getTag(this.toName);
     }
 
     @Override
@@ -78,7 +79,7 @@ public class TagAddingRecipe implements Recipe<Container> {
 
         private TagAddingRecipeSerializer() {}
 
-        public static ResourceLocation registryName = TagAddingRecipe.TYPE_ID;
+        public static ResourceLocation registryName = TagAddingRecipeType.ID;
 
         @Override
         public TagAddingRecipe fromJson(ResourceLocation id, JsonObject o) {
@@ -127,8 +128,8 @@ public class TagAddingRecipe implements Recipe<Container> {
 
     public static final class TagAddingRecipeType implements RecipeType<TagAddingRecipe> {
 
-        private TagAddingRecipeType() {}
+        public static final ResourceLocation ID = new ResourceLocation(TaggedStonecutter.MOD_ID, "add");
 
-        public static final String ID = "add";
+        private TagAddingRecipeType() {}
     }
 }
