@@ -93,15 +93,18 @@ public class TaggedRecipeCateory implements IRecipeCategory<TagAddingRecipe> {
         //input
         guiItemStacks.init(0, true, 0, 27);
         guiItemStacks.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
-        //output preprocessing to prevent overflow
-        final List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
+        //output
+        List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
         int size = outputs.size();
+        //preprocessing to prevent overflow
         final int slotCountTotal = slotCountX * slotCountY;
         if (size > slotCountTotal) {
+            List<List<ItemStack>> compacted = ingredients.getOutputs(VanillaTypes.ITEM);
             for (int i = slotCountTotal; i < size; i++) {
-                outputs.get(i % slotCountTotal).addAll(outputs.get(i));
+                compacted.get(i % slotCountTotal).addAll(outputs.get(i));
             }
             size = slotCountTotal;
+            outputs = compacted;
         }
         //output
         for (int i = 0; i < size; i++) {
