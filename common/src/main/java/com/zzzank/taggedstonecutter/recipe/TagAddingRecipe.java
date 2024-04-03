@@ -40,6 +40,15 @@ public class TagAddingRecipe implements Recipe<Container> {
         this.to = itemTags.getTag(this.toName);
     }
 
+    public Tag<Item> getFrom() {
+        return from;
+    }
+
+    public Tag<Item> getTo() {
+        return to;
+    }
+
+    @Deprecated
     @Override
     public ItemStack assemble(Container container) {
         return ItemStack.EMPTY;
@@ -55,6 +64,7 @@ public class TagAddingRecipe implements Recipe<Container> {
         return id;
     }
 
+    @Deprecated
     @Override
     public ItemStack getResultItem() {
         return ItemStack.EMPTY;
@@ -70,6 +80,7 @@ public class TagAddingRecipe implements Recipe<Container> {
         return TagAddingRecipe.TYPE;
     }
 
+    @Deprecated
     @Override
     public boolean matches(Container container, Level level) {
         return false;
