@@ -9,8 +9,9 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.IRecipeTransferRegistration;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 
 @JeiPlugin
 public class JPlugin implements IModPlugin {
@@ -40,9 +41,6 @@ public class JPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(@Nonnull IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(
-            Registry.ITEM.get(new ResourceLocation("minecraft", "stonecutter")).getDefaultInstance(),
-            TaggedRecipeCateory.UID
-        );
+        registration.addRecipeCatalyst(new ItemStack(Blocks.STONECUTTER), TaggedRecipeCateory.UID);
     }
 }

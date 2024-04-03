@@ -12,28 +12,23 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.core.Registry;
-import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Blocks;
 
 public class TaggedRecipeCateory implements IRecipeCategory<TagAddingRecipe> {
 
     public static final ResourceLocation UID = new ResourceLocation(TaggedStonecutter.MOD_ID, "recipe");
     // TODO translate
-    public static final BaseComponent TITLE = new TranslatableComponent("Tagged Stonecutter");
+    public static final TranslatableComponent TITLE = new TranslatableComponent("Tagged Stonecutter");
     private final IDrawable icon;
     private final IDrawable background;
 
     public TaggedRecipeCateory(IJeiHelpers helpers) {
-        this.icon =
-            helpers
-                .getGuiHelper()
-                .createDrawableIngredient(
-                    Registry.ITEM.get(new ResourceLocation("minecraft", "stonecutter")).getDefaultInstance()
-                );
+        this.icon = helpers.getGuiHelper().createDrawableIngredient(new ItemStack(Blocks.STONECUTTER));
         this.background =
             helpers
                 .getGuiHelper()
