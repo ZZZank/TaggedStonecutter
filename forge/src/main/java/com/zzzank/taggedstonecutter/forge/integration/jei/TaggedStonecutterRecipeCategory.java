@@ -21,7 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 
-public class TaggedRecipeCateory implements IRecipeCategory<TagAddingRecipe> {
+public class TaggedStonecutterRecipeCategory implements IRecipeCategory<TagAddingRecipe> {
 
     public static final ResourceLocation UID = new ResourceLocation(TaggedStonecutter.MOD_ID, "recipe");
     // TODO translate
@@ -32,7 +32,7 @@ public class TaggedRecipeCateory implements IRecipeCategory<TagAddingRecipe> {
     private static final int slotCountX = 7;
     private static final int slotCountY = 4;
 
-    public TaggedRecipeCateory(IJeiHelpers helpers) {
+    public TaggedStonecutterRecipeCategory(IJeiHelpers helpers) {
         this.icon = helpers.getGuiHelper().createDrawableIngredient(new ItemStack(Blocks.STONECUTTER));
         this.background =
             helpers

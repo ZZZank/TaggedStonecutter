@@ -72,6 +72,6 @@ public abstract class DummyRecipeGenerater {
     }
 
     public static void clearCache() {
-        recipes = null;
+        DummyRecipeGenerater.recipes = null;
     }
 }

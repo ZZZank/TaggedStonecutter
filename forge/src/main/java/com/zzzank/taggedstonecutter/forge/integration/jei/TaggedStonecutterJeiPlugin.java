@@ -14,23 +14,25 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 
 @JeiPlugin
-public class JPlugin implements IModPlugin {
+public class TaggedStonecutterJeiPlugin implements IModPlugin {
 
-    public JPlugin() {}
+    private static final ResourceLocation uid = new ResourceLocation(TaggedStonecutter.MOD_ID, "jei_plugin");
+
+    public TaggedStonecutterJeiPlugin() {}
 
     @Override
     public ResourceLocation getPluginUid() {
-        return new ResourceLocation(TaggedStonecutter.MOD_ID, "jei_plugin");
+        return uid;
     }
 
     @Override
     public void registerCategories(@Nonnull IRecipeCategoryRegistration registration) {
-        registration.addRecipeCategories(new TaggedRecipeCateory(registration.getJeiHelpers()));
+        registration.addRecipeCategories(new TaggedStonecutterRecipeCategory(registration.getJeiHelpers()));
     }
 
     @Override
     public void registerRecipes(@Nonnull IRecipeRegistration registration) {
-        registration.addRecipes(DummyRecipeGenerater.getAllTagAddingRecipes(), TaggedRecipeCateory.UID);
+        registration.addRecipes(DummyRecipeGenerater.getAllTagAddingRecipes(), TaggedStonecutterRecipeCategory.UID);
     }
 
     /**
@@ -41,6 +43,6 @@ public class JPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(@Nonnull IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(Blocks.STONECUTTER), TaggedRecipeCateory.UID);
+        registration.addRecipeCatalyst(new ItemStack(Blocks.STONECUTTER), TaggedStonecutterRecipeCategory.UID);
     }
 }
