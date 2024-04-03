@@ -2,6 +2,7 @@ package com.zzzank.taggedstonecutter.forge.integration.jei;
 
 import com.zzzank.taggedstonecutter.TaggedStonecutter;
 import com.zzzank.taggedstonecutter.recipe.TagAddingRecipe;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -74,13 +75,27 @@ public class TaggedRecipeCateory implements IRecipeCategory<TagAddingRecipe> {
     public void setIngredients(@Nonnull TagAddingRecipe recipe, @Nonnull IIngredients ingredients) {
         ingredients.setInputIngredients(Arrays.asList(Ingredient.of(recipe.getFrom())));
 
-        List<ItemStack> outputs = recipe
+        List<ItemStack> outputsRaw = recipe
             .getTo()
             .getValues()
             .stream()
             .map(Item::getDefaultInstance)
             .collect(Collectors.toList());
-        ingredients.setOutputs(VanillaTypes.ITEM, outputs);
+        final int slotCountTotal = slotCountX * slotCountY;
+        if (outputsRaw.size() < slotCountTotal) {
+            ingredients.setOutputs(VanillaTypes.ITEM, outputsRaw);
+        } else {
+            //manually prevent output overflow
+            final List<List<ItemStack>> compacted = new ArrayList<>(slotCountTotal);
+            final int repeatCount = (outputsRaw.size() / slotCountTotal) + 1;
+            for (int i = 0; i < slotCountTotal; i++) {
+                compacted.add(new ArrayList<>(repeatCount));
+            }
+            for (int i = 0; i < outputsRaw.size(); i++) {
+                compacted.get(i % slotCountTotal).add(outputsRaw.get(i));
+            }
+            ingredients.setOutputLists(VanillaTypes.ITEM, compacted);
+        }
     }
 
     @Override
@@ -94,18 +109,8 @@ public class TaggedRecipeCateory implements IRecipeCategory<TagAddingRecipe> {
         guiItemStacks.init(0, true, 0, 27);
         guiItemStacks.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
         //output
-        List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
-        int size = outputs.size();
-        //preprocessing to prevent overflow
-        final int slotCountTotal = slotCountX * slotCountY;
-        if (size > slotCountTotal) {
-            List<List<ItemStack>> compacted = ingredients.getOutputs(VanillaTypes.ITEM);
-            for (int i = slotCountTotal; i < size; i++) {
-                compacted.get(i % slotCountTotal).addAll(outputs.get(i));
-            }
-            size = slotCountTotal;
-            outputs = compacted;
-        }
+        final List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
+        final int size = outputs.size();
         //output
         for (int i = 0; i < size; i++) {
             int x = 48 + 18 * (i % slotCountX);
