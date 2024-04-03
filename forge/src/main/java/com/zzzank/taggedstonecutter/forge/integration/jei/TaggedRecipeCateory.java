@@ -2,6 +2,7 @@ package com.zzzank.taggedstonecutter.forge.integration.jei;
 
 import com.zzzank.taggedstonecutter.TaggedStonecutter;
 import com.zzzank.taggedstonecutter.recipe.TagAddingRecipe;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
@@ -27,6 +28,9 @@ public class TaggedRecipeCateory implements IRecipeCategory<TagAddingRecipe> {
     private final IDrawable icon;
     private final IDrawable background;
 
+    private static final int slotCountX = 7;
+    private static final int slotCountY = 4;
+
     public TaggedRecipeCateory(IJeiHelpers helpers) {
         this.icon = helpers.getGuiHelper().createDrawableIngredient(new ItemStack(Blocks.STONECUTTER));
         this.background =
@@ -36,8 +40,8 @@ public class TaggedRecipeCateory implements IRecipeCategory<TagAddingRecipe> {
                     new ResourceLocation(TaggedStonecutter.MOD_ID, "textures/screen/jei_background.png"),
                     0,
                     0,
-                    174,
-                    72
+                    48 + 18 * slotCountX,
+                    18 * slotCountY
                 );
     }
 
@@ -86,13 +90,23 @@ public class TaggedRecipeCateory implements IRecipeCategory<TagAddingRecipe> {
         @Nonnull IIngredients ingredients
     ) {
         IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
+        //input
         guiItemStacks.init(0, true, 0, 27);
         guiItemStacks.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
-
-        List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
-        for (int i = 0; i < outputs.size(); i++) {
-            int x = 48 + 18 * (i % 7);
-            int y = 18 * (i / 7);
+        //output preprocessing to prevent overflow
+        final List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
+        int size = outputs.size();
+        final int slotCountTotal = slotCountX * slotCountY;
+        if (size > slotCountTotal) {
+            for (int i = slotCountTotal; i < size; i++) {
+                outputs.get(i % slotCountTotal).addAll(outputs.get(i));
+            }
+            size = slotCountTotal;
+        }
+        //output
+        for (int i = 0; i < size; i++) {
+            int x = 48 + 18 * (i % slotCountX);
+            int y = 18 * (i / slotCountX);
             guiItemStacks.init(i + 1, false, x, y);
             guiItemStacks.set(i + 1, outputs.get(i));
         }
