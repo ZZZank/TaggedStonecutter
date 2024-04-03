@@ -73,13 +73,7 @@ public class TaggedRecipeCateory implements IRecipeCategory<TagAddingRecipe> {
 
     @Override
     public void setIngredients(@Nonnull TagAddingRecipe recipe, @Nonnull IIngredients ingredients) {
-        List<ItemStack> inputs = recipe
-            .getFrom()
-            .getValues()
-            .stream()
-            .map(Item::getDefaultInstance)
-            .collect(Collectors.toList());
-        ingredients.setInputs(VanillaTypes.ITEM, inputs);
+        ingredients.setInputIngredients(Arrays.asList(Ingredient.of(recipe.getFrom())));
 
         List<ItemStack> outputs = recipe
             .getTo()
