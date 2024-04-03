@@ -54,6 +54,10 @@ allprojects {
 			    includeGroup "org.parchmentmc.data"
 		    }
 	    }
+        maven {
+            url = "https://dvs1.progwml6.com/files/maven/"
+        }
+        maven { url "https://modmaven.dev" }
     }
 
     tasks.withType(JavaCompile) {
