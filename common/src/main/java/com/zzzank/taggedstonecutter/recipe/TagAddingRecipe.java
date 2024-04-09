@@ -3,6 +3,7 @@ package com.zzzank.taggedstonecutter.recipe;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.zzzank.taggedstonecutter.TaggedStonecutter;
+import java.util.Optional;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.Tag;
@@ -142,5 +143,15 @@ public class TagAddingRecipe implements Recipe<Container> {
         public static final ResourceLocation ID = new ResourceLocation(TaggedStonecutter.MOD_ID, "add");
 
         private TagAddingRecipeType() {}
+
+        @Override
+        @Deprecated
+        public <C extends Container> Optional<TagAddingRecipe> tryMatch(
+            Recipe<C> recipe,
+            Level level,
+            C container
+        ) {
+            return Optional.empty();
+        }
     }
 }

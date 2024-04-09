@@ -16,7 +16,9 @@ public abstract class DummyRecipeGenerater {
 
     //TODO: cache?
 
-    protected static List<TagAddingRecipe> recipes = null;
+    private static List<TagAddingRecipe> recipes = null;
+
+    @Nullable
     private static MinecraftServer server = null;
 
     public static void setServer(MinecraftServer server) {
@@ -45,7 +47,7 @@ public abstract class DummyRecipeGenerater {
         return toDummyRecipes(Ingredient.of(matched.to));
     }
 
-    private static List<StonecutterRecipe> toDummyRecipes(Ingredient ingr) {
+    private static List<StonecutterRecipe> toDummyRecipes(@Nullable Ingredient ingr) {
         if (ingr == null) {
             return new ArrayList<>(0);
         }
