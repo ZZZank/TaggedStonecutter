@@ -37,6 +37,9 @@ public abstract class StonecutterMenuMixin extends AbstractContainerMenu {
     @Final
     Slot resultSlot;
 
+    /**
+     * @see net.minecraft.world.inventory.StonecutterMenu#setupRecipeList(Container,ItemStack)
+     */
     @Inject(method = "setupRecipeList", at = @At("HEAD"), cancellable = true)
     public void onSetupRecipeList(Container container, ItemStack stack, CallbackInfo ci) {
         if (stack.isEmpty()) {
@@ -53,24 +56,23 @@ public abstract class StonecutterMenuMixin extends AbstractContainerMenu {
     }
 
     /**
+     * {@code getRecipeFor} happens before recipe manager has checked original stonecutter recipe,
+     * injecting at this point prevents some boring checks
      * @see net.minecraft.world.inventory.StonecutterMenu#quickMoveStack(Player, int)
      */
     @Inject(
         method = "quickMoveStack",
-        at = @At(value = "INVOKE", target = "Ljava/util/Optional;isPresent()Z"),
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/crafting/RecipeManager;getRecipeFor(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;"
+        ),
         cancellable = true
     )
     public void onQuickMoveStack(Player player, int index, CallbackInfoReturnable<ItemStack> ci) {
-        if (index == 0 || index == 1) {
-            return;
-        }
-        Slot slot = this.slots.get(index);
-        if (slot == null || !slot.hasItem()) {
-            return;
-        }
+        ItemStack stack = this.slots.get(index).getItem();
         if (
-            DummyRecipeGenerater.tryMatch(slot.getItem().getItem()) != null &&
-            !this.moveItemStackTo(slot.getItem(), 0, 1, false)
+            DummyRecipeGenerater.tryMatch(stack.getItem()) != null &&
+            !this.moveItemStackTo(stack, 0, 1, false)
         ) {
             ci.setReturnValue(ItemStack.EMPTY);
         }
