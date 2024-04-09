@@ -1,7 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "[36,)"
 #issueTrackerURL = ""
-license = "MIT"
+license = "GPLv3"
 
 [[mods]]
 modId = "taggedstonecutter"
