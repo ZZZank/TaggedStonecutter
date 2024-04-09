@@ -40,6 +40,9 @@ public abstract class DummyRecipeGenerater {
     }
 
     public static List<StonecutterRecipe> generateRecipes(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return new ArrayList<>(0);
+        }
         TagAddingRecipe matched = tryMatch(stack.getItem());
         if (matched == null) {
             return new ArrayList<>(0);

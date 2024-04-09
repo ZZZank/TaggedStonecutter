@@ -14,7 +14,7 @@ public class DummyStonecutterRecipe extends StonecutterRecipe {
 
     /**
      * given that our recipes are injected after slot is changed, and item matching is
-     * already done by recipe generator, we should be able to use an empty ingredient
+     * already done via recipe generator, we should be able to use an empty ingredient. 
      * 
      * looks not safe though
      */

@@ -42,9 +42,6 @@ public abstract class StonecutterMenuMixin extends AbstractContainerMenu {
      */
     @Inject(method = "setupRecipeList", at = @At("HEAD"), cancellable = true)
     public void onSetupRecipeList(Container container, ItemStack stack, CallbackInfo ci) {
-        if (stack.isEmpty()) {
-            return;
-        }
         final List<StonecutterRecipe> dummyRecipes = DummyRecipeGenerater.generateRecipes(stack);
         if (dummyRecipes.isEmpty()) {
             return;
