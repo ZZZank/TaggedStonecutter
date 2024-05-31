@@ -6,9 +6,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.StonecutterRecipe;
 
-public class DummyStonecutterRecipe extends StonecutterRecipe {
+public class DummyRecipe extends StonecutterRecipe {
 
-    public DummyStonecutterRecipe(int id, Ingredient ingr, ItemStack stack) {
+    public DummyRecipe(int id, Ingredient ingr, ItemStack stack) {
         super(toDummyId(id), "dummy", ingr, stack);
     }
 
@@ -18,7 +18,7 @@ public class DummyStonecutterRecipe extends StonecutterRecipe {
      * 
      * looks not safe though
      */
-    public DummyStonecutterRecipe(int id, ItemStack stack) {
+    public DummyRecipe(int id, ItemStack stack) {
         super(toDummyId(id), "dummy", null, stack);
     }
 

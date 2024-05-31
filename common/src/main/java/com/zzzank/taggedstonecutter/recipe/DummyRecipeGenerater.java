@@ -1,6 +1,7 @@
 package com.zzzank.taggedstonecutter.recipe;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.SerializationTags;
@@ -16,56 +17,56 @@ public abstract class DummyRecipeGenerater {
 
     //TODO: cache?
 
-    private static List<TagAddingRecipe> recipes = null;
+    private static List<AllIngredientRecipe> recipes = null;
 
     @Nullable
     private static MinecraftServer server = null;
 
-    public static void setServer(MinecraftServer server) {
+    public static void setServer(@Nullable MinecraftServer server) {
         DummyRecipeGenerater.server = server;
     }
 
-    public static List<TagAddingRecipe> getAllTagAddingRecipes() {
+    public static List<AllIngredientRecipe> getAllTagAddingRecipes() {
         if (recipes == null) {
             if (server == null) {
-                return new ArrayList<>(0);
+                return Collections.emptyList();
             }
             RecipeManager recipeManager = server.getRecipeManager();
             if (recipeManager == null) {
-                return new ArrayList<>(0);
+                return Collections.emptyList();
             }
-            recipes = recipeManager.getAllRecipesFor(TagAddingRecipe.TYPE);
+            recipes = recipeManager.getAllRecipesFor(AllIngredientRecipe.TYPE);
         }
         return recipes;
     }
 
     public static List<StonecutterRecipe> generateRecipes(ItemStack stack) {
         if (stack.isEmpty()) {
-            return new ArrayList<>(0);
+            return Collections.emptyList();
         }
-        TagAddingRecipe matched = tryMatch(stack.getItem());
+        AllIngredientRecipe matched = tryMatch(stack);
         if (matched == null) {
-            return new ArrayList<>(0);
+            return Collections.emptyList();
         }
-        return toDummyRecipes(Ingredient.of(matched.to));
+        return toDummyRecipes(matched.getTo());
     }
 
     private static List<StonecutterRecipe> toDummyRecipes(@Nullable Ingredient ingr) {
         if (ingr == null) {
-            return new ArrayList<>(0);
+            return Collections.emptyList();
         }
         final ItemStack[] items = ingr.getItems();
         final List<StonecutterRecipe> recipes = new ArrayList<>(items.length);
         for (int i = 0; i < items.length; i++) {
-            recipes.add(new DummyStonecutterRecipe(i, ingr, items[i]));
+            recipes.add(new DummyRecipe(i, ingr, items[i]));
         }
         return recipes;
     }
 
     @Nullable
-    public static TagAddingRecipe tryMatch(Item item) {
-        for (TagAddingRecipe recipe : getAllTagAddingRecipes()) {
-            if (recipe.from.contains(item)) {
+    public static AllIngredientRecipe tryMatch(ItemStack item) {
+        for (AllIngredientRecipe recipe : getAllTagAddingRecipes()) {
+            if (recipe.getFrom().test(item)) {
                 return recipe;
             }
         }

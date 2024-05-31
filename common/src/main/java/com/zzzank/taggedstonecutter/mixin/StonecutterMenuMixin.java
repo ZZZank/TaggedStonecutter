@@ -68,7 +68,7 @@ public abstract class StonecutterMenuMixin extends AbstractContainerMenu {
     public void onQuickMoveStack(Player player, int index, CallbackInfoReturnable<ItemStack> ci) {
         ItemStack stack = this.slots.get(index).getItem();
         if (
-            DummyRecipeGenerater.tryMatch(stack.getItem()) != null &&
+            DummyRecipeGenerater.tryMatch(stack) != null &&
             !this.moveItemStackTo(stack, 0, 1, false)
         ) {
             ci.setReturnValue(ItemStack.EMPTY);

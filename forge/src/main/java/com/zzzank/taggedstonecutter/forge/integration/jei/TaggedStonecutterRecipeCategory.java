@@ -1,11 +1,11 @@
 package com.zzzank.taggedstonecutter.forge.integration.jei;
 
 import com.zzzank.taggedstonecutter.TaggedStonecutter;
-import com.zzzank.taggedstonecutter.recipe.TagAddingRecipe;
+import com.zzzank.taggedstonecutter.recipe.AllIngredientRecipe;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -16,12 +16,10 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 
-public class TaggedStonecutterRecipeCategory implements IRecipeCategory<TagAddingRecipe> {
+public class TaggedStonecutterRecipeCategory implements IRecipeCategory<AllIngredientRecipe> {
 
     public static final ResourceLocation UID = new ResourceLocation(TaggedStonecutter.MOD_ID, "recipe");
     // TODO translate
@@ -52,8 +50,8 @@ public class TaggedStonecutterRecipeCategory implements IRecipeCategory<TagAddin
     }
 
     @Override
-    public Class<TagAddingRecipe> getRecipeClass() {
-        return TagAddingRecipe.class;
+    public Class<AllIngredientRecipe> getRecipeClass() {
+        return AllIngredientRecipe.class;
     }
 
     @Override
@@ -72,36 +70,31 @@ public class TaggedStonecutterRecipeCategory implements IRecipeCategory<TagAddin
     }
 
     @Override
-    public void setIngredients(@Nonnull TagAddingRecipe recipe, @Nonnull IIngredients ingredients) {
-        ingredients.setInputIngredients(Arrays.asList(Ingredient.of(recipe.getFrom())));
+    public void setIngredients(@Nonnull AllIngredientRecipe recipe, @Nonnull IIngredients ingredients) {
+        ingredients.setInputIngredients(Collections.singletonList(recipe.getFrom()));
 
-        List<ItemStack> outputsRaw = recipe
-            .getTo()
-            .getValues()
-            .stream()
-            .map(Item::getDefaultInstance)
-            .collect(Collectors.toList());
+        ItemStack[] outputsRaw = recipe.getTo().getItems();
         final int slotCountTotal = slotCountX * slotCountY;
-        if (outputsRaw.size() < slotCountTotal) {
-            ingredients.setOutputs(VanillaTypes.ITEM, outputsRaw);
-        } else {
-            //manually prevent output overflow
-            final List<List<ItemStack>> compacted = new ArrayList<>(slotCountTotal);
-            final int repeatCount = (outputsRaw.size() / slotCountTotal) + 1;
-            for (int i = 0; i < slotCountTotal; i++) {
-                compacted.add(new ArrayList<>(repeatCount));
-            }
-            for (int i = 0; i < outputsRaw.size(); i++) {
-                compacted.get(i % slotCountTotal).add(outputsRaw.get(i));
-            }
-            ingredients.setOutputLists(VanillaTypes.ITEM, compacted);
+        if (outputsRaw.length < slotCountTotal) {
+            ingredients.setOutputs(VanillaTypes.ITEM, Arrays.asList(outputsRaw));
+            return;
         }
+        //manually prevent output overflow
+        final List<List<ItemStack>> compacted = new ArrayList<>(slotCountTotal);
+        final int repeatCount = (outputsRaw.length / slotCountTotal) + 1;
+        for (int i = 0; i < slotCountTotal; i++) {
+            compacted.add(new ArrayList<>(repeatCount));
+        }
+        for (int i = 0; i < outputsRaw.length; i++) {
+            compacted.get(i % slotCountTotal).add(outputsRaw[i]);
+        }
+        ingredients.setOutputLists(VanillaTypes.ITEM, compacted);
     }
 
     @Override
     public void setRecipe(
         @Nonnull IRecipeLayout recipeLayout,
-        @Nonnull TagAddingRecipe recipe,
+        @Nonnull AllIngredientRecipe recipe,
         @Nonnull IIngredients ingredients
     ) {
         IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();

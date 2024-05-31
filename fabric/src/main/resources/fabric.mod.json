@@ -11,11 +11,11 @@
     "sources": "https://github.com/FabricMC/fabric-example-mod"
   },
   "license": "GPLv3",
-  "icon": "assets/examplemod/icon.png",
+  "icon": "assets/taggedstonecutter/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.zzzank.taggedstonecutter.ExampleModFabric"
+      "com.zzzank.taggedstonecutter.fabric.TaggedStonecutterFabric"
     ]
   },
   "mixins": [
